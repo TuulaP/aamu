@@ -8,10 +8,13 @@ import os
 import re
 import urllib
 import urllib2
+import sys
 
 import BeautifulSoup
 import httplib2
 import requests
+import HTMLParser
+
 from apiclient import discovery, errors
 from oauth2client import client, tools
 from oauth2client.file import Storage
@@ -33,9 +36,9 @@ try:
     
     #some basic initialization if needed
     if (not flags.key):
-        flags.key = "something-to-find-email"
+        flags.key = "[the tag]"
     if (not flags.content):
-        flags.content = "something-in-content"
+        flags.content = "some text"  #not in use
 
     print("Flags in use: %s , %s" % (flags.key,flags.content))
 
@@ -162,23 +165,27 @@ def main():
     bodystr=bodystr.replace("\n","")
 
     # if the email needs to be stored
-    # f = open('rawemail.html', 'w')
-    # f.write(bodystr)
-    # f.close
+    f = open('rawemail2.html', 'w')
+    f.write(bodystr)
+    f.close
 
-    x = re.search('(?<='+flags.content+' )\((.*?) \)(?P<alt1>.*)',bodystr)
-
-    link = x.group(0).replace("\n","")
-    link = x.group(1)
+    #TODO : this works with this specific case - needs tuning for any other case. 
+    spi = bodystr.split("www.examplexamplexampleurl.com/")
+    linksz = spi[2].split("jakso: ")[1].split(" ")[0]
+    linksz= "https://www."+linksz
+    link = linksz
+    #print ("Linkki?", linksz)
+    
+    # Link got , grab then the desired content    
     print("Portalpage:", link)
     webContent = GetWebPageAndStore (link,"temp1.html")
 
     # Grab the redirectlink from the portal page and download that page
-    soup = BeautifulSoup.BeautifulSoup(webContent)
-    link = soup.a['href'].replace(" ","")
+    #soup = BeautifulSoup.BeautifulSoup(webContent)
+    #link = soup.a['href'].replace(" ","")
     
     #Saving these pages is optional but might be useful for debugging
-    webContent=GetWebPageAndStore (link,"temp2.html")
+    #webContent=GetWebPageAndStore (link,"temp2.html")
 
     # Now we have the real content page, so grab the desired content from there.
 
