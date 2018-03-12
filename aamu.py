@@ -170,22 +170,22 @@ def main():
     f.close
 
     #TODO : this works with this specific case - needs tuning for any other case. 
-    spi = bodystr.split("www.examplexamplexampleurl.com/")
-    linksz = spi[2].split("jakso: ")[1].split(" ")[0]
-    linksz= "https://www."+linksz
+    spi = bodystr.split(flags.content)
+    linksz = spi[2].split("jakso: ")[0].split(" ")[0]
+    linksz= "https://"+flags.content+"/"+linksz.rstrip()
     link = linksz
-    #print ("Linkki?", linksz)
+    #print ("Linkki?"+ linksz+"<")
     
     # Link got , grab then the desired content    
     print("Portalpage:", link)
     webContent = GetWebPageAndStore (link,"temp1.html")
 
     # Grab the redirectlink from the portal page and download that page
-    #soup = BeautifulSoup.BeautifulSoup(webContent)
-    #link = soup.a['href'].replace(" ","")
+    soup = BeautifulSoup.BeautifulSoup(webContent)
+    link = soup.a['href'].replace(" ","")
     
     #Saving these pages is optional but might be useful for debugging
-    #webContent=GetWebPageAndStore (link,"temp2.html")
+    webContent=GetWebPageAndStore (link,"temp2.html")
 
     # Now we have the real content page, so grab the desired content from there.
 
