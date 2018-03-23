@@ -171,8 +171,10 @@ def main():
 
     #TODO : this works with this specific case - needs tuning for any other case. 
     spi = bodystr.split(flags.content)
-    linksz = spi[2].split("jakso: ")[0].split(" ")[0]
-    linksz= "https://"+flags.content+"/"+linksz.rstrip()
+    linksz = spi[2].split("jakso: ")[1].split(" ")[0]
+    #linksz= "https://"+flags.content+"/"+linksz.rstrip()
+    linksz = "https://www."+linksz.rstrip()
+
     link = linksz
     #print ("Linkki?"+ linksz+"<")
     
@@ -182,15 +184,24 @@ def main():
 
     # Grab the redirectlink from the portal page and download that page
     soup = BeautifulSoup.BeautifulSoup(webContent)
-    link = soup.a['href'].replace(" ","")
+    #link = soup.a['href'].replace(" ","")
     
+
+    for tag in soup.findAll('a'): #
+        #if ("https://cta-redirect" in tag['href']):
+        print("Content: >>", tag['href'], "<!---\n")        
+        #GetWebPageAndStore (link,"temp3.html")
+
+    print ("Link?:",link)
+
     #Saving these pages is optional but might be useful for debugging
     webContent=GetWebPageAndStore (link,"temp2.html")
-
     # Now we have the real content page, so grab the desired content from there.
-
     soup = BeautifulSoup.BeautifulSoup(webContent)
-
+    
+   
+            
+            
     for tag in soup.findAll('li'): #
         print("Content:", tag,"::",tag['data-url'], "<---\n")        
         dataurl=tag['data-url']
