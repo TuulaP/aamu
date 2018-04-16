@@ -171,12 +171,18 @@ def main():
 
     #TODO : this works with this specific case - needs tuning for any other case. 
     spi = bodystr.split(flags.content)
-    linksz = spi[2].split("jakso: ")[1].split(" ")[0]
+
+    #TODO: the chaky part.
+    try:
+        linksz = spi[2].split("jakso: ")[1].split(" ")[0]
+    except:
+        linksz = spi[1].split("jakso: ")[1].split(" ")[0]
+
     #linksz= "https://"+flags.content+"/"+linksz.rstrip()
     linksz = "https://www."+linksz.rstrip()
 
     link = linksz
-    #print ("Linkki?"+ linksz+"<")
+    print ("Linkki?"+ linksz+"<")
     
     # Link got , grab then the desired content    
     print("Portalpage:", link)
